@@ -16,23 +16,32 @@ namespace MudBlazor.Utilities
         Task ScrollToTop();
     }
 
-    public class ScrollManager :  IScrollManager
+    public class ScrollManager : IScrollManager
     {
-        [Inject] public IJSRuntime JS { get; set; }
+        private readonly IJSRuntime _jSRuntime;
+
+        public ScrollManager(IJSRuntime jSRuntime)
+        {
+            _jSRuntime = jSRuntime;
+        }
 
         public async Task ScrollToFragment(string id)
         {
-            await JS.InvokeVoidAsync("blazorHelpers.scrollToFragment", id);
+            await _jSRuntime.InvokeVoidAsync("blazorHelpers.scrollToFragment", id);
         }
 
         public async Task ScrollTo(int left, int top, ScrollBehavior scrollBehavior)
         {
-            await JS.InvokeVoidAsync("blazorHelpers.scrollTo", left, top, scrollBehavior.ToString());
+            await _jSRuntime
+                .InvokeVoidAsync("blazorHelpers.scrollTo",
+                                            left,
+                                            top,
+                                            scrollBehavior.ToString());
         }
 
         public async Task ScrollToTop()
         {
-            await ScrollTo( 0, 0, ScrollBehavior.auto);
+            await ScrollTo(0, 0, ScrollBehavior.auto);
         }
     }
 
