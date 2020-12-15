@@ -100,9 +100,11 @@
         NavMan.LocationChanged += HandleLocationChanged;
     }
 
-    //events need to be void, not Task. It's the only case for `async void`
+  
     protected async void HandleLocationChanged(object sender, LocationChangedEventArgs e)
     {
+        //if the user clicks in a link, the navigation is intercepted and page scrolls to top
+        //if the user clicks the browser back button, the navigation is not intercepted, so the scroll is restored to the last position. This is the intended behavior
         if (e.IsNavigationIntercepted)
         {
             await ScrollManager.ScrollToTop();
