@@ -15,7 +15,8 @@ strong, b {
 }
 
 body {
-    height: 100%;
+    //not sure if this is necessary. I guess it's not
+    min-height: 100%;
     color: var(--mud-palette-text-primary);
     font-size: 0.875rem;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
