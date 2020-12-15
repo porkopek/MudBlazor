@@ -1,10 +1,12 @@
 ﻿@namespace MudBlazor
 @using MudBlazor.Utilities
+@using Microsoft.AspNetCore.Components.Routing
 @inherits MudComponentBase
+@inject NavigationManager NavMan
 
 <div @attributes="UserAttributes" class="@Classname" style="@Style">
     <CascadingValue IsFixed="true" Value="@this">
-            @ChildContent
+        @ChildContent
     </CascadingValue>
 </div>
 
@@ -15,6 +17,8 @@
         .AddClass("mud-application-layout-rtl", RightToLeft)
         .AddClass(Class)
     .Build();
+
+    [Inject] IScrollManager ScrollManager { get; set; }
 
     /// <summary>
     /// Child content of component.
@@ -79,14 +83,29 @@
     {
         foreach (var drawer in _drawers)
         {
-            if(drawer.Anchor == Anchor.Left)
+            if (drawer.Anchor == Anchor.Left)
             {
                 drawer.Anchor = Anchor.Right;
             }
-            else if(drawer.Anchor == Anchor.Right)
+            else if (drawer.Anchor == Anchor.Right)
             {
                 drawer.Anchor = Anchor.Left;
             }
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        NavMan.LocationChanged += HandleLocationChanged;
+    }
+
+    //events need to be void, not Task. It's the only case for `async void`
+    protected async void HandleLocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        if (e.IsNavigationIntercepted)
+        {
+            await ScrollManager.ScrollToTop();
         }
     }
 

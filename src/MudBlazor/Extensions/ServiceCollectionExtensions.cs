@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MudBlazor.Dialog;
 using MudBlazor.Services;
+using MudBlazor.Utilities;
 
 namespace MudBlazor
 {
@@ -35,5 +36,9 @@ namespace MudBlazor
             return AddMudBlazorSnackbar(services, options);
         }
 
+        public static IServiceCollection AddMudBlazorScrollManager(this IServiceCollection services)
+        {
+            return services.AddScoped<IScrollManager, ScrollManager>();
+        }
     }
 }
