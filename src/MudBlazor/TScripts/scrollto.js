@@ -5,5 +5,8 @@ window.blazorHelpers = {
         if (element) {
             element.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'start' });
         }
+    },
+    scrollTo: (element, left, top, behavior) => {
+        element.scrollTo({ left, top, behavior });
     }
 };

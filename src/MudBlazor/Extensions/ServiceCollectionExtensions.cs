@@ -33,5 +33,17 @@ namespace MudBlazor
             return AddMudBlazorSnackbar(services, options);
         }
 
+        
+        /// <summary>
+        /// Injects the services that allow to manage scroll
+        /// </summary>
+       /// <returns></returns>
+        public static IServiceCollection AddMudBlazorScrollServices(this IServiceCollection services)
+        {
+            services.AddScoped<IScrollListener, ScrollListener>();
+            services.AddScoped<IScrollManager, ScrollManager>();
+            return services;
+        }
+
     }
 }
