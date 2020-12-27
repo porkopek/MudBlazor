@@ -16,11 +16,12 @@ namespace MudBlazor
     /// </summary>
     public interface IScrollManager
     {
-        Task ScrollTo(int left, int top, ScrollBehavior scrollBehavior);
+        Task ScrollTo(ElementReference element, int left, int top, ScrollBehavior scrollBehavior);
         Task ScrollToFragment(string id);
-        Task ScrollToTop(ScrollBehavior scrollBehavior= ScrollBehavior.Auto);
-        ElementReference Ref { get; set; }
+        Task ScrollToTop(ElementReference element, ScrollBehavior scrollBehavior = ScrollBehavior.Auto);
     }
+
+    
 
 
     public class ScrollManager : IScrollManager
@@ -32,11 +33,6 @@ namespace MudBlazor
             _jSRuntime = jSRuntime;
         }
 
-        /// <summary>
-        /// The element reference that NEEDS to be attached to the @ref
-        /// of the element that will receive scroll events
-        /// </summary>
-        public ElementReference Ref { get; set; }
 
         /// <summary>
         /// Scroll to an url fragment
@@ -51,18 +47,19 @@ namespace MudBlazor
         /// <summary>
         /// Scrolls to the coordinates of the element defined in Ref property
         /// </summary>
+        /// <param name="element">the ElementReference to the DOM element</param>
         /// <param name="left">x coordinate</param>
         /// <param name="top">y coordinate</param>
         /// <param name="scrollBehavior">smooth or auto</param>
         /// <returns></returns>
-        public async Task ScrollTo(int left, int top, ScrollBehavior scrollBehavior)
+        public async Task ScrollTo(ElementReference element, int left, int top, ScrollBehavior scrollBehavior)
         {
-            if (Ref.Id == null) 
-                throw new ScrollManagerException("The Ref property must be assigned to the @ref of the element you want to scroll to");
+            if (element.Id == null)
+                throw new ScrollManagerException("The element reference must be assigned to the element that you want to scroll to");
 
             await _jSRuntime
                 .InvokeVoidAsync("blazorHelpers.scrollTo",
-                                            Ref,
+                                            element,
                                             left,
                                             top,
                                             scrollBehavior.ToDescriptionString());
@@ -71,11 +68,12 @@ namespace MudBlazor
         /// <summary>
         /// Scrolls to the top of the element defined in Ref property
         /// </summary>
+        /// <param name="element">the ElementReference to the DOM element</param>
         /// <param name="scrollBehavior">smooth or auto</param>
         /// <returns></returns>
-        public async Task ScrollToTop(ScrollBehavior scrollBehavior=ScrollBehavior.Auto)
+        public async Task ScrollToTop(ElementReference element, ScrollBehavior scrollBehavior = ScrollBehavior.Auto)
         {
-            await ScrollTo(0, 0, scrollBehavior);
+            await ScrollTo(element, 0, 0, scrollBehavior);
         }
     }
 
