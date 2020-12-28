@@ -17,7 +17,7 @@ namespace MudBlazor
     public interface IScrollManager
     {
         Task ScrollTo(ElementReference element, int left, int top, ScrollBehavior scrollBehavior);
-        Task ScrollToFragment(string id);
+        Task ScrollToFragment(string id, ScrollBehavior behavior);
         Task ScrollToTop(ElementReference element, ScrollBehavior scrollBehavior = ScrollBehavior.Auto);
     }
 
@@ -38,10 +38,14 @@ namespace MudBlazor
         /// Scroll to an url fragment
         /// </summary>
         /// <param name="id">The id of the element that is going to be scrolled to</param>
+        /// <param name="behavior">smooth or auto</param>
         /// <returns></returns>
-        public async Task ScrollToFragment(string id)
+        public async Task ScrollToFragment(string id, ScrollBehavior behavior)
         {
-            await _jSRuntime.InvokeVoidAsync("blazorHelpers.scrollToFragment", id);
+            await _jSRuntime
+                .InvokeVoidAsync("blazorHelpers.scrollToFragment", 
+                                            id,
+                                            behavior.ToDescriptionString());
         }
 
         /// <summary>
@@ -50,9 +54,9 @@ namespace MudBlazor
         /// <param name="element">the ElementReference to the DOM element</param>
         /// <param name="left">x coordinate</param>
         /// <param name="top">y coordinate</param>
-        /// <param name="scrollBehavior">smooth or auto</param>
+        /// <param name="behavior">smooth or auto</param>
         /// <returns></returns>
-        public async Task ScrollTo(ElementReference element, int left, int top, ScrollBehavior scrollBehavior)
+        public async Task ScrollTo(ElementReference element, int left, int top, ScrollBehavior behavior)
         {
             if (element.Id == null)
                 throw new ScrollManagerException("The element reference must be assigned to the element that you want to scroll to");
@@ -62,7 +66,7 @@ namespace MudBlazor
                                             element,
                                             left,
                                             top,
-                                            scrollBehavior.ToDescriptionString());
+                                            behavior.ToDescriptionString());
         }
 
         /// <summary>

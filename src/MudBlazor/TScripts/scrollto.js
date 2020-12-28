@@ -1,9 +1,9 @@
 window.blazorHelpers = {
-    scrollToFragment: (elementId) => {
+    scrollToFragment: (elementId, behavior) => {
         var element = document.getElementById(elementId);
 
         if (element) {
-            element.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'start' });
+            element.scrollIntoView({ behavior, block: 'center', inline: 'start' });
         }
     },
     scrollTo: (element, left, top, behavior) => {
