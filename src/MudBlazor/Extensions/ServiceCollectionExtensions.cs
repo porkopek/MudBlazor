@@ -40,8 +40,8 @@ namespace MudBlazor
        /// <returns></returns>
         public static IServiceCollection AddMudBlazorScrollServices(this IServiceCollection services)
         {
-            services.AddScoped<IScrollListener, ScrollListener>();
-            services.AddScoped<IScrollManager, ScrollManager>();
+            services.AddTransient<IScrollListener, ScrollListener>();
+            services.AddTransient<IScrollManager, ScrollManager>();
             return services;
         }
 

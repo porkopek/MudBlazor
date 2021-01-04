@@ -6,7 +6,10 @@ window.blazorHelpers = {
             element.scrollIntoView({ behavior, block: 'center', inline: 'start' });
         }
     },
-    scrollTo: (element, left, top, behavior) => {
+    scrollTo: (selector, left, top, behavior) => {
+
+        element = document.querySelector(selector) || document.documentElement;
+        console.log(element);
         element.scrollTo({ left, top, behavior });
     }
 };
