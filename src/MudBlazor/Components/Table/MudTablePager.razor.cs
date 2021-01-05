@@ -1,7 +1,5 @@
 ﻿using System;
 using Microsoft.AspNetCore.Components;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace MudBlazor
 {
@@ -47,7 +45,10 @@ namespace MudBlazor
         {
             base.OnInitialized();
             if (Context != null)
+            {
+                Context.HasPager = true;
                 Context.PagerStateHasChanged = StateHasChanged;
+            }
         }
 
     }

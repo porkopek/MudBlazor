@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using MudBlazor.Interfaces;
 using MudBlazor.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MudBlazor
 {
-    public class ComponentBaseMudMenu : MudBaseButton
+    public partial class MudMenu : MudBaseButton, IActivatable
     {
         protected string Classname =>
         new CssBuilder("mud-menu")
@@ -31,15 +30,25 @@ namespace MudBlazor
         [Parameter] public bool DisableElevation { get; set; }
         [Parameter] public bool Disabled { get; set; }
         [Parameter] public bool DisableRipple { get; set; }
+
+        /// <summary>
+        /// Place a MudButton, a MudIconButton or any other component capable of acting as an activator. This will
+        /// override the standard button and all parameters which concern it.
+        /// </summary>
+        [Parameter] public RenderFragment ActivatorContent { get; set; }
+        
+        /// <summary>
+        /// Add menu items here
+        /// </summary>
         [Parameter] public RenderFragment ChildContent { get; set; }
 
-        public async Task CloseMenu()
+        public void CloseMenu()
         {
             isOpen = false;
             StateHasChanged();
         }
 
-        public async Task OpenMenu()
+        public void OpenMenu()
         {
             if (Disabled)
                 return;
@@ -53,6 +62,16 @@ namespace MudBlazor
                 return;
             isOpen = !isOpen;
             StateHasChanged();
+        }
+
+        /// <summary>
+        /// Implementation of IActivatable.Activate, toggles the menu.
+        /// </summary>
+        /// <param name="activator"></param>
+        /// <param name="args"></param>
+        public void Activate(object activator, MouseEventArgs args)
+        {
+            ToggleMenu();
         }
     }
 }

@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
-
+﻿using System;
+using Microsoft.AspNetCore.Components;
 using MudBlazor.Utilities;
-
-using System;
-using System.Collections.Generic;
 
 
 namespace MudBlazor
@@ -72,8 +69,7 @@ namespace MudBlazor
         protected override void OnInitialized()
         {
             Context?.SortLabels.Add(this);
-            if (SortBy != null)
-                Context?.InitializeSorting();
+            Context?.InitializeSorting();
         }
 
         public void Dispose()

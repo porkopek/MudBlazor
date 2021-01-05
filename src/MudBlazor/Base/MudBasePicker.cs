@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.JSInterop;
-using MudBlazor.Utilities;
+﻿using Microsoft.AspNetCore.Components;
 
 namespace MudBlazor
 {
@@ -45,6 +36,11 @@ namespace MudBlazor
         /// If true, the picker will be disabled.
         /// </summary>
         [Parameter] public bool Disabled { get; set; }
+
+        /// <summary>
+        /// If true, the picker will be editable.
+        /// </summary>
+        [Parameter] public bool Editable { get; set; } = false;
 
         /// <summary>
         /// Hide toolbar and show only date/time views.

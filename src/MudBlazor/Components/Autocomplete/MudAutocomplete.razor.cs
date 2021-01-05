@@ -1,15 +1,12 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using MudBlazor.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
+using MudBlazor.Utilities;
 
 namespace MudBlazor
 {
@@ -21,6 +18,16 @@ namespace MudBlazor
             new CssBuilder("mud-select")
             .AddClass(Class)
             .Build();
+
+        /// <summary>
+        /// If string has value the label text will be displayed in the input, and scaled down at the top if the input has value.
+        /// </summary>
+        [Parameter] public string Label { get; set; }
+
+        /// <summary>
+        /// The short hint displayed in the input before the user enters a value.
+        /// </summary>
+        [Parameter] public string Placeholder { get; set; }
 
         /// <summary>
         /// If true, compact vertical padding will be applied to all select items.
@@ -37,7 +44,7 @@ namespace MudBlazor
         /// </summary>
         [Parameter] public string CloseIcon { get; set; } = Icons.Material.ArrowDropDown;
 
-        internal event Action<HashSet<T>> SelectionChangedFromOutside;
+        //internal event Action<HashSet<T>> SelectionChangedFromOutside;
 
         /// <summary>
         /// Sets the maxheight the select can have when open.
@@ -120,7 +127,7 @@ namespace MudBlazor
             _timer?.Dispose();
             IsOpen = false;
             UpdateIcon();
-            ValidateValue(Value);
+            BeginValidate();
             StateHasChanged();
         }
 
@@ -165,15 +172,15 @@ namespace MudBlazor
         private T[] _items;
         private int _selectedListItemIndex = 0;
 
-        protected override void GenericValueChanged(T value)
+        protected override void UpdateTextProperty(bool updateValue)
         {
-            base.GenericValueChanged(value);
+            base.UpdateTextProperty(updateValue);
             _timer?.Dispose();
         }
 
-        protected override void StringValueChanged(string text)
+        protected override void UpdateValueProperty(bool updateText)
         {
-            if (ResetValueOnEmptyText && string.IsNullOrWhiteSpace(text))
+            if (ResetValueOnEmptyText && string.IsNullOrWhiteSpace(Text))
                 Value = default(T);
             _timer?.Dispose();
             _timer = new Timer(OnTimerComplete, null, DebounceInterval, Timeout.Infinite);
@@ -255,7 +262,7 @@ namespace MudBlazor
         public async void ScrollToListItem(int index)
         {
             string id = GetListItemId(index);
-            await JsRuntime.InvokeVoidAsync("blazorHelpers.scrollToFragment", id);
+            await JsRuntime.InvokeVoidAsync("scrollHelpers.scrollToFragment", id);
             StateHasChanged();
         }
 
@@ -278,8 +285,10 @@ namespace MudBlazor
         {
             if (!IsOpen)
                 CoerceTextToValue();
-            base.OnBlurred(args);
-        }
+            // we should not validate on blur in autocomplete, because the user needs to click out of the input to select a value, 
+            // resulting in a premature validation. thus, don't call base
+            //base.OnBlurred(args);
+    }
 
         private void CoerceTextToValue()
         {

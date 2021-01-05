@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Components;
-using MudBlazor.Extensions;
-using MudBlazor.Utilities;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using MudBlazor.Extensions;
+using MudBlazor.Utilities;
 
 namespace MudBlazor
 {
@@ -238,10 +237,9 @@ namespace MudBlazor
             PickerMonth = GetMonthEnd().AddDays(1);
         }
 
-        private async void OnYearClick()
+        private void OnYearClick()
         {
             OpenTo = OpenTo.Year;
-            //await InvokeAsync(StateHasChanged);
             StateHasChanged();
             _scrollToYearAfterRender = true;
         }
@@ -260,7 +258,7 @@ namespace MudBlazor
         {
             _scrollToYearAfterRender = false;
             string id = $"{_componentId}{GetMonthStart().Year.ToString()}";
-            await JsRuntime.InvokeVoidAsync("blazorHelpers.scrollToFragment", id);
+            await JsRuntime.InvokeVoidAsync("scrollHelpers.scrollToFragment", id);
             StateHasChanged();
         }
 

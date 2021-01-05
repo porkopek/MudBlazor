@@ -1,10 +1,6 @@
-﻿using System;
-using System.Windows.Input;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+
 using MudBlazor.Utilities;
-using MudBlazor.Extensions;
-using Microsoft.AspNetCore.Components.Web;
 
 namespace MudBlazor
 {
@@ -13,6 +9,18 @@ namespace MudBlazor
         protected string Classname =>
            new CssBuilder("mud-input-input-control").AddClass(Class)
            .Build();
+
+
+        /// <summary>
+        /// The short hint displayed in the input before the user enters a value.
+        /// </summary>
+        [Parameter] public string Placeholder { get; set; }
+
+        /// <summary>
+        /// If string has value the label text will be displayed in the input, and scaled down at the top if the input has value.
+        /// </summary>
+        [Parameter] public string Label { get; set; }
+
 
     }
 

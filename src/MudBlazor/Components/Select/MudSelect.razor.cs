@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Components;
-using MudBlazor.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using MudBlazor.Components.Select;
+using Microsoft.AspNetCore.Components;
+using MudBlazor.Utilities;
 using MudBlazor.Utilities.Exceptions;
 
 namespace MudBlazor
@@ -23,6 +21,11 @@ namespace MudBlazor
         /// Add the MudSelectItems here
         /// </summary>
         [Parameter] public RenderFragment ChildContent { get; set; }
+
+        /// <summary>
+        /// If string has value the label text will be displayed in the input, and scaled down at the top if the input has value.
+        /// </summary>
+        [Parameter] public string Label { get; set; }
 
         /// <summary>
         /// If true, compact vertical padding will be applied to all select items.
@@ -138,19 +141,17 @@ namespace MudBlazor
             return selected_item.ChildContent;
         }
 
-        protected override void StringValueChanged(string text)
+        protected override void UpdateValueProperty(bool updateText)
         {
             // Select does not support updating the value through the Text property at all!
-            //base.StringValueChanged(text);
         }
 
-        protected override void GenericValueChanged(T value)
+        protected override void UpdateTextProperty(bool updateValue)
         {
             // when multiselection is true, we don't update the text when the value changes. 
             // instead the Text will be set with a comma separated list of selected values
-            if (MultiSelection)
-                return;
-            base.GenericValueChanged(value);
+            if (!MultiSelection)
+                base.UpdateTextProperty(updateValue);
         }
 
         internal event Action<HashSet<T>> SelectionChangedFromOutside;

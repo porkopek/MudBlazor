@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Components;
-using MudBlazor.Utilities;
-using MudBlazor.Extensions;
-using System.Windows.Input;
-using Microsoft.JSInterop;
-using Microsoft.AspNetCore.Components.Web;
+﻿using System;
 using System.Threading.Tasks;
-using System;
+using System.Windows.Input;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
+using MudBlazor.Extensions;
+using MudBlazor.Utilities;
 
 namespace MudBlazor
 {
@@ -153,10 +153,11 @@ namespace MudBlazor
         {
             if (ChipSet != null)
             {
-                ChipSet.OnChipClicked(this);
+                _=ChipSet.OnChipClicked(this);
             }
             if (Link != null)
             {
+                // TODO: use MudElement to render <a> and this code can be removed. we know that it has potential problems on iOS
                 if (string.IsNullOrWhiteSpace(Target))
                     UriHelper.NavigateTo(Link, ForceLoad);
                 else
@@ -193,7 +194,11 @@ namespace MudBlazor
             try
             {
                 ChipSet?.Remove(this);
-            }catch(Exception){}
+            }
+            catch (Exception)
+            {
+                /* ignore! */
+            }
         }
 
     }

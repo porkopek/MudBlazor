@@ -1,5 +1,6 @@
 ﻿@namespace MudBlazor
 @using MudBlazor.Utilities
+@using Microsoft.JSInterop;
 @using MudBlazor.Extensions
 @inherits MudComponentBase
 @implements IDisposable
@@ -9,17 +10,20 @@
         @ChildContent
     </CascadingValue>
 </aside>
-<MudOverlay Visible="true" OnClick="@DrawerClose" Class="@OverlayClass" DarkBackground="true" />
+<MudOverlay Visible="true" OnClick="@DrawerClose" Class="@OverlayClass" DarkBackground="true" LockScroll=false />
 
 
 @code {
+    [Inject] IJSRuntime JsRuntime { get; set; }
+
+    private bool _rtl;
 
     protected string Classname =>
     new CssBuilder("mud-drawer")
       .AddClass($"mud-drawer-anchor-{Anchor.ToDescriptionString()}")
       .AddClass($"mud-drawer--open", Open)
       .AddClass($"mud-drawer--closed", !Open)
-      .AddClass($"mud-drawer--initial", MobileInitiallyClosed)
+      .AddClass($"mud-drawer--initial", _initial)
       .AddClass($"mud-drawer-clipped", Clipped)
       .AddClass($"mud-drawer-color-{Color.ToDescriptionString()}", Color != Color.Default)
       .AddClass($"mud-elevation-{Elevation.ToString()}")
@@ -30,8 +34,26 @@
     new CssBuilder("mud-drawer-overlay mud-overlay-drawer")
       .AddClass($"mud-drawer-anchor-{Anchor.ToDescriptionString()}")
       .AddClass($"mud-drawer--open", !Open)
-      .AddClass($"mud-drawer--initial", MobileInitiallyClosed)
+      .AddClass($"mud-drawer--initial", _initial)
     .Build();
+
+    [CascadingParameter] MudLayout Layout { get; set; }
+    
+    [CascadingParameter] bool RightToLeft
+    { 
+        get
+        {
+            return _rtl;
+        }
+        set
+        {
+            if (_rtl != value)
+            {
+                _rtl = value;
+                this.Anchor = this.Anchor == Anchor.Left ? Anchor.Right : Anchor.Left;
+            }
+        }
+    }
 
     /// <summary>
     /// The higher the number, the heavier the drop-shadow. 0 for no shadow.
@@ -49,11 +71,6 @@
     [Parameter] public Color Color { get; set; } = Color.Default;
 
     /// <summary>
-    /// If true the drawer will initially be closed on mobiles or smaller screens.
-    /// </summary>
-    [Parameter] public bool MobileInitiallyClosed { get; set; } = true;
-
-    /// <summary>
     /// Child content of component.
     /// </summary>
     [Parameter] public RenderFragment ChildContent { get; set; }
@@ -68,9 +85,11 @@
         set
         {
             if (_open == value)
+            {
                 return;
+            }
             _open = value;
-            MobileInitiallyClosed = false;
+            _initial = false;
             Layout?.FireDrawersChanged();
             StateHasChanged();
         }
@@ -78,9 +97,9 @@
 
     [Parameter] public EventCallback<bool> OpenChanged { get; set; }
 
-
     private bool _open;
     private bool _clipped;
+    private bool _initial = true;
 
     [Parameter]
     public bool Clipped
@@ -89,20 +108,42 @@
         set
         {
             if (_clipped == value)
+            {
                 return;
+            }
             _clipped = value;
             Layout?.FireDrawersChanged();
             StateHasChanged();
         }
     }
 
-    [CascadingParameter] MudLayout Layout { get; set; }
-
-
     protected override void OnInitialized()
     {
         base.OnInitialized();
         Layout?.Add(this);
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _afterFirstRender = true;
+        }
+    }
+
+    private bool _afterFirstRender;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (_afterFirstRender)
+        {
+            var browserSize = await CheckScreenSize();
+            if (browserSize.Width < 1280)
+            {
+                await OpenChanged.InvokeAsync(false);
+                _afterFirstRender = false;
+            }
+        }
     }
 
     public void Dispose()
@@ -124,5 +165,25 @@
         {
             OpenChanged.InvokeAsync(true);
         }
+    }
+
+    public async void OnNavigation()
+    {
+        var browserSize = await CheckScreenSize();
+        if (browserSize.Width < 1280)
+        {
+            DrawerClose();
+        }
+    }
+
+    private async Task<BrowserWindowSize> CheckScreenSize()
+    {
+        return await JsRuntime.InvokeAsync<BrowserWindowSize>("resizeListener.getBrowserWindowSize");
+    }
+
+    private class BrowserWindowSize
+    {
+        public int Height { get; set; }
+        public int Width { get; set; }
     }
 }

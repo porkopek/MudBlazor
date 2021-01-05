@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MudBlazor
 
 using System;
-using System.Globalization;
 
 // ReSharper disable once CheckNamespace
 internal static class TimeSpanExtensions
@@ -42,7 +41,6 @@ internal static class TimeSpanExtensions
 
     public static int ToAmPmHour(this TimeSpan time)
     {
-        var pm = time.Hours >= 12;
         var h = time.Hours % 12;
         if (h == 0)
             h = 12;

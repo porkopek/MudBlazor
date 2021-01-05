@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using MudBlazor.Extensions;
+﻿using System;
+using Microsoft.AspNetCore.Components;
 using MudBlazor.Utilities;
-using System.ComponentModel.DataAnnotations;
 
 namespace MudBlazor
 {
@@ -66,6 +61,10 @@ namespace MudBlazor
         /// If true, the controls will be disabled.
         /// </summary>
         [Parameter] public bool Disabled { get; set; }
+        /// <summary>
+        /// If true, the ratings will show without interactions.
+        /// </summary>
+        [Parameter] public bool ReadOnly { get; set; }
 
         /// <summary>
         /// Fires when SelectedValue changes.

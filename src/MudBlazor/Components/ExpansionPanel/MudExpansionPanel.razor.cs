@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System;
+using Microsoft.AspNetCore.Components;
 using MudBlazor.Utilities;
-using System;
-using System.Linq;
 
 namespace MudBlazor
 {
@@ -21,10 +20,33 @@ namespace MudBlazor
         .Build();
 
         /// <summary>
+        /// Explicitly sets the height for the Collapse element to override the css default.
+        /// </summary>
+        [Parameter] public int? MaxHeight { get; set; }
+
+        /// <summary>
+        /// RenderFragment to be displayed in the expansion panel which will override header text if defined.
+        /// </summary>
+        [Parameter] public RenderFragment TitleContent { get; set; }
+
+        /// <summary>
         /// The text to be displayed in the expansion panel.
         /// </summary>
         [Parameter] public string Text { get; set; }
 
+        /// <summary>
+        /// If true, expand icon will not show
+        /// </summary>
+        [Parameter] public bool HideIcon { get; set; }
+
+        /// <summary>
+        /// Raised when IsExpanded changes.
+        /// </summary>
+        [Parameter] public EventCallback<bool> IsExpandedChanged { get; set; }
+
+        /// <summary>
+        /// Expansion state of the panel (two-way bindable)
+        /// </summary>
         [Parameter]
         public bool IsExpanded
         {
@@ -34,11 +56,12 @@ namespace MudBlazor
                 if (_isExpanded == value)
                     return;
                 _isExpanded = value;
-                if (Parent?.MultiExpansion==true)
+                if (Parent?.MultiExpansion == true)
                     Parent?.UpdateAll();
                 else
                     Parent?.CloseAllExcept(this);
-                InvokeAsync(StateHasChanged);
+                //InvokeAsync(StateHasChanged);
+                IsExpandedChanged.InvokeAsync(_isExpanded);
             }
         }
 
@@ -68,7 +91,7 @@ namespace MudBlazor
         {
             if (Disabled)
                 return;
-            if (Parent?.MultiExpansion==true)
+            if (Parent?.MultiExpansion == true)
             {
                 IsExpanded = !IsExpanded;
             }
@@ -78,7 +101,7 @@ namespace MudBlazor
             }
         }
 
-        public void Expand(bool update_parent=true)
+        public void Expand(bool update_parent = true)
         {
             if (update_parent)
                 IsExpanded = true;

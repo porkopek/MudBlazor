@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Input;
 
 namespace MudBlazor.Docs.Utilities
@@ -24,7 +22,8 @@ namespace MudBlazor.Docs.Utilities
         {
             return true;
         }
+#pragma warning disable CS0067 // justification implementing interface     
         public event EventHandler CanExecuteChanged;
-
+#pragma warning restore CS0067
     }
 }

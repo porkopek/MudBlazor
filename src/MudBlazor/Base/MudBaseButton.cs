@@ -1,19 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.JSInterop;
+using MudBlazor.Interfaces;
 
 namespace MudBlazor
 {
     public abstract class MudBaseButton : MudComponentBase
     {
-        [Inject] public Microsoft.AspNetCore.Components.NavigationManager UriHelper { get; set; }
-
-        [Inject] public IJSRuntime JsRuntime { get; set; }
+        /// <summary>
+        /// Potential activation target for this button. This enables RenderFragments with user-defined
+        /// buttons which will automatically activate the intended functionality. 
+        /// </summary>
+        [CascadingParameter] protected IActivatable Activateable { get; set; }
+        
+        /// <summary>
+        /// The HTML element that will be rendered in the root by the component
+        /// </summary>
+        [Parameter] public string HtmlTag { get; set; }
 
         /// <summary>
         /// The button Type (Button, Submit, Refresh)
@@ -29,11 +33,6 @@ namespace MudBlazor
         /// The target attribute specifies where to open the link, if Link is specified. Possible values: _blank | _self | _parent | _top | <i>framename</i>
         /// </summary>
         [Parameter] public string Target { get; set; }
-
-        /// <summary>
-        /// If true, force browser to redirect outside component router-space.
-        /// </summary>
-        [Parameter] public bool ForceLoad { get; set; }
 
         /// <summary>
         /// Command executed when the user clicks on an element.
@@ -52,21 +51,27 @@ namespace MudBlazor
 
         protected async Task OnClickHandler(MouseEventArgs ev)
         {
-            if (Link != null)
+            await OnClick.InvokeAsync(ev);
+            if (Command?.CanExecute(CommandParameter) ?? false)
             {
-                if (string.IsNullOrWhiteSpace(Target))
-                    UriHelper.NavigateTo(Link, ForceLoad);
-                else
-                    await JsRuntime.InvokeVoidAsync("blazorOpen", new object[2] { Link, Target });
+                Command.Execute(CommandParameter);
             }
-            else
+            Activateable?.Activate(this, ev);
+        }
+
+        protected override void OnInitialized()
+        {
+            //default tag for a MudButton is "button"
+            if (string.IsNullOrWhiteSpace(HtmlTag))
             {
-                await OnClick.InvokeAsync(ev);
-                if (Command?.CanExecute(CommandParameter) ?? false)
-                {
-                    Command.Execute(CommandParameter);
-                }
+                HtmlTag = "button";
             }
+            //But if Link property is set, it changes to an anchor element automatically
+            if (!string.IsNullOrWhiteSpace(Link))
+            {
+                HtmlTag = "a";
+            }
+            base.OnInitialized();
         }
     }
 }

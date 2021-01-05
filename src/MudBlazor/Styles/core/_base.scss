@@ -6,7 +6,7 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-html,svg {
+ svg {
     height: 100%;
 }
 
@@ -15,8 +15,6 @@ strong, b {
 }
 
 body {
-    //not sure if this is necessary. I guess it's not
-    min-height: 100%;
     color: var(--mud-palette-text-primary);
     font-size: 0.875rem;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -31,8 +29,7 @@ a {
 }
 
 .mud-layout {
-    width:100%;
     height: 100%;
-    min-height: 100vh;
-    display: flex;
+    width: 100%;
+    position: relative;
 }

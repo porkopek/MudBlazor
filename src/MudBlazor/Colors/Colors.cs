@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace MudBlazor
 {
+    [ExcludeFromCodeCoverage]
     public static class Colors
     {
         public static partial class Red

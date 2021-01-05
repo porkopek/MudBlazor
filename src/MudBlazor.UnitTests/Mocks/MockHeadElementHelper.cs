@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Toolbelt.Blazor.HeadElement;
 
 namespace MudBlazor.UnitTests.Mocks
 {
+    #pragma warning disable CS1998 // Justification - Implementing IHeadElementHelper
     public class MockHeadElementHelper : IHeadElementHelper
     {
         public async ValueTask<IEnumerable<LinkElement>> GetDefaultLinkElementsAsync()
@@ -54,4 +53,5 @@ namespace MudBlazor.UnitTests.Mocks
             _title = title;
         }
     }
+    #pragma warning restore CS1998
 }

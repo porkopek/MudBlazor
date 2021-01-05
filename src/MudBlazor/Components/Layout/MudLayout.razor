@@ -6,7 +6,9 @@
 
 <div @attributes="UserAttributes" class="@Classname" style="@Style">
     <CascadingValue IsFixed="true" Value="@this">
-        @ChildContent
+        <CascadingValue Value="@RightToLeft">
+            @ChildContent
+        </CascadingValue>
     </CascadingValue>
 </div>
 
@@ -36,11 +38,11 @@
         get => _rtl;
         set
         {
-            if (_rtl == value)
-                return;
-            _rtl = value;
-            SwapDrawerAnchors();
-            StateHasChanged();
+            if (_rtl != value)
+            {
+                _rtl = value;
+                StateHasChanged();
+            }
         }
     }
 
@@ -66,11 +68,8 @@
         return _drawers.FirstOrDefault(d => d.Anchor == anchor)?.Clipped;
     }
 
-    public event Action DrawersChanged;
-
     public void FireDrawersChanged()
     {
-        //DrawersChanged?.Invoke();
         StateHasChanged();
     }
 
@@ -78,37 +77,4 @@
     {
         return _drawers.Any(d => d.Anchor == anchor);
     }
-
-    public void SwapDrawerAnchors()
-    {
-        foreach (var drawer in _drawers)
-        {
-            if (drawer.Anchor == Anchor.Left)
-            {
-                drawer.Anchor = Anchor.Right;
-            }
-            else if (drawer.Anchor == Anchor.Right)
-            {
-                drawer.Anchor = Anchor.Left;
-            }
-        }
-    }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        NavMan.LocationChanged += HandleLocationChanged;
-    }
-
-  
-    protected async void HandleLocationChanged(object sender, LocationChangedEventArgs e)
-    {
-        //if the user clicks in a link, the navigation is intercepted and page scrolls to top
-        //if the user clicks the browser back button, the navigation is not intercepted, so the scroll is restored to the last position. This is the intended behavior
-        if (e.IsNavigationIntercepted)
-        {
-            await ScrollManager.ScrollToTop();
-        }
-    }
-
 }

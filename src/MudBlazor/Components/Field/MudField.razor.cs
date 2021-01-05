@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using MudBlazor.Extensions;
 using MudBlazor.Utilities;
-using Microsoft.AspNetCore.Components.Web;
 
 namespace MudBlazor
 {
+    //TODO Maybe can inherit from MudBaseInput?
     public partial class MudField : MudComponentBase
     {
         protected string Classname =>
