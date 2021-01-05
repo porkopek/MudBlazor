@@ -1,6 +1,7 @@
 @using System.Linq
 @using MudBlazor.Docs.Extensions
 @inject NavigationManager NavMan
+@inject IJSRuntime Js
 <MudNavMenu Class="mudblazor-navmenu">
     <div class="docs-nav-fader"></div>
     
@@ -88,7 +89,7 @@
 @code {
     DocsComponents DocsComponents = new DocsComponents();
     DocsComponents DocsComponentsAPI = new DocsComponents();
-    
+
     //sections are "getting-started","components", "api", ...
     string _section;
     //component links are the part of the url that tells us what component is featured
@@ -104,63 +105,65 @@
 
     void AddDocsComponents()
     {
-        DocsComponents.AddItem("Container", typeof(MudContainer))                            .AddItem("Grid", typeof(MudGrid))
-                            .AddItem("Hidden", typeof(MudHidden))
-                            .AddNavGroup("Buttons", false, new DocsComponents()
-                                .AddItem("Button", typeof(MudButton))
-                                .AddItem("IconButton", typeof(MudIconButton))
-                                .AddItem("ToggleIconButton", typeof(MudToggleIconButton))
-                                .AddItem("Button FAB", typeof(MudFab)))
-                            .AddNavGroup("Charts", false, new DocsComponents()
-                                    .AddItem("Donut chart", typeof(MudComponent))
-                                    .AddItem("Line chart", typeof(MudComponent))
-                                    .AddItem("Pie chart", typeof(MudComponent)))
-                            .AddItem("Checkbox", typeof(MudCheckBox<T>))
-                            .AddItem("Chips", typeof(MudChip))
-                            .AddItem("ChipSet", typeof(MudChipSet))
-                            .AddItem("Badge", typeof(MudBadge))
-                                .AddNavGroup("Form Inputs & controls", false, new DocsComponents()
-                                    .AddItem("Radio", typeof(MudRadio))
-                                    .AddItem("Select", typeof(MudSelect<T>))
-                                    .AddItem("Slider", typeof(MudSlider<T>))
-                                    .AddItem("Switch", typeof(MudSwitch<T>))
-                                    .AddItem("Text Field", typeof(MudTextField<T>))
-                                    .AddItem("Form", typeof(MudForm))
-                                    .AddItem("Autocomplete", typeof(MudAutocomplete<T>))
-                                    .AddItem("Field", typeof(MudField))
-                                )
-                            .AddItem("AppBar", typeof(MudAppBar))
-                            .AddItem("Drawer", typeof(MudDrawer))
-                            .AddItem("Link", typeof(MudLink))
-                            .AddItem("Menu", typeof(MudMenu))
-                            .AddItem("Nav Menu", typeof(MudNavMenu))
-                            .AddItem("Tabs", typeof(MudTabs))
-                                .AddNavGroup("Pickers", false, new DocsComponents()
-                                    .AddItem("Date Picker", typeof(MudDatePicker))
-                                    .AddItem("Time Picker", typeof(MudTimePicker))
-                                )
-                            .AddItem("Progress", typeof(MudProgressCircular))
-                            .AddItem("Dialog", typeof(MudDialog))
-                            .AddItem("Snackbar", typeof(MudSnackbarProvider))
-                            .AddItem("Avatar", typeof(MudAvatar))
-                            .AddItem("Alert", typeof(MudAlert))
-                            .AddItem("Card", typeof(MudCard))
-                            .AddItem("Divider", typeof(MudDivider))
-                            .AddItem("Expansion Panel", typeof(MudExpansionPanel))
-                            .AddItem("Icons", typeof(MudIcon))
-                            .AddItem("List", typeof(MudList))
-                            .AddItem("Paper", typeof(MudPaper))
-                            .AddItem("Rating", typeof(MudRating))
-                            .AddItem("Skeleton", typeof(MudSkeleton))
-                            .AddItem("Table", typeof(MudTable<T>))
-                            .AddItem("Simple Table", typeof(MudSimpleTable))
-                            .AddItem("Tooltip", typeof(MudTooltip))
-                            .AddItem("Typography", typeof(MudText))
-                            .AddItem("Overlay", typeof(MudOverlay))
-                            .AddItem("Highlighter", typeof(MudHighlighter))
-                            .AddItem("Element", typeof(MudElement))
-                            .AddItem("FileUpload", typeof(MudElement))
-                            .AddItem("ScrollToTop", typeof(MudScrollToTop));
+        DocsComponents.AddItem("Container", typeof(MudContainer))
+                                    .AddItem("Grid", typeof(MudGrid))
+                                    .AddItem("Hidden", typeof(MudHidden))
+                                    .AddNavGroup("Buttons", false, new DocsComponents()
+                                        .AddItem("Button", typeof(MudButton))
+                                        .AddItem("IconButton", typeof(MudIconButton))
+                                        .AddItem("ToggleIconButton", typeof(MudToggleIconButton))
+                                        .AddItem("Button FAB", typeof(MudFab)))
+                                    .AddNavGroup("Charts", false, new DocsComponents()
+                                            .AddItem("Donut chart", typeof(MudComponent))
+                                            .AddItem("Line chart", typeof(MudComponent))
+                                            .AddItem("Pie chart", typeof(MudComponent)))
+                                    .AddItem("Checkbox", typeof(MudCheckBox<T>))
+                                    .AddItem("Chips", typeof(MudChip))
+                                    .AddItem("ChipSet", typeof(MudChipSet))
+                                    .AddItem("Badge", typeof(MudBadge))
+                                        .AddNavGroup("Form Inputs & controls", false, new DocsComponents()
+                                            .AddItem("Radio", typeof(MudRadio))
+                                            .AddItem("Select", typeof(MudSelect<T>))
+                                            .AddItem("Slider", typeof(MudSlider<T>))
+                                            .AddItem("Switch", typeof(MudSwitch<T>))
+                                            .AddItem("Text Field", typeof(MudTextField<T>))
+                                            .AddItem("Form", typeof(MudForm))
+                                            .AddItem("Autocomplete", typeof(MudAutocomplete<T>))
+                                            .AddItem("Field", typeof(MudField))
+                                        )
+                                    .AddItem("AppBar", typeof(MudAppBar))
+                                    .AddItem("Drawer", typeof(MudDrawer))
+                                    .AddItem("Link", typeof(MudLink))
+                                    .AddItem("Menu", typeof(MudMenu))
+                                    .AddItem("Nav Menu", typeof(MudNavMenu))
+                                    .AddItem("Tabs", typeof(MudTabs))
+                                        .AddNavGroup("Pickers", false, new DocsComponents()
+                                            .AddItem("Date Picker", typeof(MudDatePicker))
+                                            .AddItem("Time Picker", typeof(MudTimePicker))
+                                        )
+                                    .AddItem("Progress", typeof(MudProgressCircular))
+                                    .AddItem("Dialog", typeof(MudDialog))
+                                    .AddItem("Snackbar", typeof(MudSnackbarProvider))
+                                    .AddItem("Avatar", typeof(MudAvatar))
+                                    .AddItem("Alert", typeof(MudAlert))
+                                    .AddItem("Card", typeof(MudCard))
+                                    .AddItem("Divider", typeof(MudDivider))
+                                    .AddItem("Expansion Panel", typeof(MudExpansionPanel))
+                                    .AddItem("Icons", typeof(MudIcon))
+                                    .AddItem("List", typeof(MudList))
+                                    .AddItem("Paper", typeof(MudPaper))
+                                    .AddItem("Rating", typeof(MudRating))
+                                    .AddItem("Skeleton", typeof(MudSkeleton))
+                                    .AddItem("Table", typeof(MudTable<T>))
+                                    .AddItem("Simple Table", typeof(MudSimpleTable))
+                                    .AddItem("Tooltip", typeof(MudTooltip))
+                                    .AddItem("Typography", typeof(MudText))
+                                    .AddItem("Overlay", typeof(MudOverlay))
+                                    .AddItem("Highlighter", typeof(MudHighlighter))
+                                    .AddItem("Element", typeof(MudElement))
+                                    .AddItem("FileUpload", typeof(MudElement))
+                                    .AddItem("Tree", typeof(MudTree))
+                                    .AddItem("ScrollToTop", typeof(MudScrollToTop));
 
 
     }
@@ -196,5 +199,10 @@
         //this route `/components/autocomplete` should open the subgroup "form inputs..."
         #endregion
         return item.GroupItems.ToList().Any(i => i.Link ==_componentLink);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Js.InvokeVoidAsync("mudBlazorDocs.scrollToActiveNavLink");
     }
 }
