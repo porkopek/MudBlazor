@@ -1,0 +1,56 @@
+@* Auto-generated markup. Any changes will be overwritten *@
+@namespace MudBlazor.Docs.Examples.Markup
+<div class="mud-codeblock">
+<div class="html"><pre>
+<span class="htmlTagDelimiter">&lt;</span><span class="htmlElementName">style</span><span class="htmlTagDelimiter">&gt;</span>    
+    .example-scroll-to-top-visible {
+        font-size: 20px;
+        transition: all 1s;       
+        bottom: 10px;
+        left:8px;
+    }
+    .example-scroll-to-top-hidden {       
+        visibility: hidden;
+        transition: all 1s;
+        bottom:10px;
+        left:-100%;
+    }
+
+    .example-custom-button {
+        padding: 12px 24px;
+        border-radius: 4px;
+        background-color: #ff9800;
+        box-shadow: var(--mud-elevation-24);
+    }
+<span class="htmlTagDelimiter">&lt;/</span><span class="htmlElementName">style</span><span class="htmlTagDelimiter">&gt;</span>
+
+<span class="htmlTagDelimiter">&lt;</span><span class="htmlElementName">div</span> <span class="htmlAttributeName">class</span><span class="htmlOperator">=</span><span class="quot">&quot;</span><span class="htmlAttributeValue">example-scroll-section</span><span class="quot">&quot;</span> <span class="htmlAttributeName">id</span><span class="htmlOperator">=</span><span class="quot">&quot;</span><span class="htmlAttributeValue">another_unique_identifier</span><span class="quot">&quot;</span><span class="htmlTagDelimiter">&gt;</span>
+    <span class="htmlTagDelimiter">&lt;</span><span class="htmlElementName">MudPaper</span> <span class="htmlAttributeName">Elevation</span><span class="htmlOperator">=</span><span class="quot">&quot;</span><span class="htmlAttributeValue">2</span><span class="quot">&quot;</span> <span class="htmlAttributeName">Class</span><span class="htmlOperator">=</span><span class="quot">&quot;</span><span class="htmlAttributeValue">example-inner-section</span><span class="quot">&quot;</span><span class="htmlTagDelimiter">&gt;</span>
+        <span class="htmlTagDelimiter">&lt;</span><span class="htmlElementName">h1</span><span class="htmlTagDelimiter">&gt;</span>Scroll inside this container<span class="htmlTagDelimiter">&lt;/</span><span class="htmlElementName">h1</span><span class="htmlTagDelimiter">&gt;</span>
+        <span class="htmlTagDelimiter">&lt;</span><span class="htmlElementName">h2</span><span class="htmlTagDelimiter">&gt;</span>Some initial long text<span class="htmlTagDelimiter">&lt;/</span><span class="htmlElementName">h2</span><span class="htmlTagDelimiter">&gt;</span>
+        <span class="htmlTagDelimiter">&lt;</span><span class="htmlElementName">h2</span><span class="htmlTagDelimiter">&gt;</span>Middle text<span class="htmlTagDelimiter">&lt;/</span><span class="htmlElementName">h2</span><span class="htmlTagDelimiter">&gt;</span>
+        <span class="htmlTagDelimiter">&lt;</span><span class="htmlElementName">h2</span><span class="htmlTagDelimiter">&gt;</span>Bottom text<span class="htmlTagDelimiter">&lt;/</span><span class="htmlElementName">h2</span><span class="htmlTagDelimiter">&gt;</span>
+        <span class="htmlTagDelimiter">&lt;</span><span class="htmlElementName">MudScrollToTop</span> <span class="htmlAttributeName">TopOffset</span><span class="htmlOperator">=</span><span class="quot">&quot;</span><span class="htmlAttributeValue">100</span><span class="quot">&quot;</span>
+                     <span class="htmlAttributeName">Style</span><span class="htmlOperator">=</span><span class="quot">&quot;</span><span class="htmlAttributeValue">z-index:2001</span><span class="quot">&quot;</span>
+                     <span class="htmlAttributeName">VisibleCssClass</span><span class="htmlOperator">=</span><span class="quot">&quot;</span><span class="htmlAttributeValue">example-scroll-to-top-visible</span><span class="quot">&quot;</span>
+                     <span class="htmlAttributeName">HiddenCssClass</span><span class="htmlOperator">=</span><span class="quot">&quot;</span><span class="htmlAttributeValue">example-scroll-to-top-hidden </span><span class="quot">&quot;</span>
+                     <span class="htmlAttributeName">Selector</span><span class="htmlOperator">=</span><span class="quot">&quot;</span><span class="htmlAttributeValue">#another_unique_identifier</span><span class="quot">&quot;</span><span class="htmlTagDelimiter">&gt;</span>
+            <span class="htmlTagDelimiter">&lt;</span><span class="htmlElementName">div</span> <span class="htmlAttributeName">class</span><span class="htmlOperator">=</span><span class="quot">&quot;</span><span class="htmlAttributeValue">example-custom-button</span><span class="quot">&quot;</span><span class="htmlTagDelimiter">&gt;</span>Go to top &#128526;<span class="htmlTagDelimiter">&lt;/</span><span class="htmlElementName">div</span><span class="htmlTagDelimiter">&gt;</span>
+        <span class="htmlTagDelimiter">&lt;/</span><span class="htmlElementName">MudScrollToTop</span><span class="htmlTagDelimiter">&gt;</span>
+    <span class="htmlTagDelimiter">&lt;/</span><span class="htmlElementName">MudPaper</span><span class="htmlTagDelimiter">&gt;</span>
+<span class="htmlTagDelimiter">&lt;/</span><span class="htmlElementName">div</span><span class="htmlTagDelimiter">&gt;</span>
+</pre></div>
+<div class="csharp"><pre>
+<span class="atSign">&#64;</span>code{ Color Color = Color.Success;
+    <span class="keyword">private</span> <span class="keyword">void</span> OnScroll(ScrollEventArgs e)
+    {
+        Color = (e.FirstChildBoundingClientRect.Top * -<span class="number">1</span>) <span class="keyword">switch</span>
+        {
+            <span class="keyword">var</span> x when x &lt; <span class="number">500</span> =&gt; Color.Primary,
+            <span class="keyword">var</span> x when x &lt; <span class="number">1500</span> =&gt; Color.Secondary,
+            <span class="keyword">var</span> x when x &lt; <span class="number">2500</span> =&gt; Color.Tertiary,
+            _ =&gt; Color.Error
+        };
+    } }
+</pre></div>
+</div>

@@ -4,7 +4,7 @@ using MudBlazor.Utilities;
 
 namespace MudBlazor
 {
-    public partial class ScrollToTop:IDisposable
+    public partial class MudScrollToTop:IDisposable
     {
         protected string Classname =>
         new CssBuilder("mud-scroll-to-top")
