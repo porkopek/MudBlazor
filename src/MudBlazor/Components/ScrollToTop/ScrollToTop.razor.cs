@@ -1,13 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
-
-using MudBlazor.Services;
+﻿using System;
+using Microsoft.AspNetCore.Components;
 using MudBlazor.Utilities;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MudBlazor
 {
@@ -60,6 +53,10 @@ namespace MudBlazor
         /// </summary>
         [Parameter] public ScrollBehavior ScrollBehavior { get; set; } = ScrollBehavior.Smooth;
 
+        /// <summary>
+        /// Called when scroll event is fired
+        /// </summary>
+        [Parameter] public EventCallback<ScrollEventArgs> OnScroll { get; set; }
 
         protected override void OnAfterRender(bool firstRender)
         {
@@ -71,16 +68,20 @@ namespace MudBlazor
                 ScrollListener.Selector = selector;
 
                 //suscribe to event
-                ScrollListener.OnScroll += OnScroll; }
+                ScrollListener.OnScroll += ScrollListener_OnScroll; ; }
         }
+
+        
 
         /// <summary>
         /// event received when scroll in the selected element happens
         /// </summary>
         /// <param name="sender">ScrollListener instance</param>
         /// <param name="e">Information about the position of the scrolled element</param>
-        private async void OnScroll(object sender, ScrollEventArgs e)
+        private async void ScrollListener_OnScroll(object sender, ScrollEventArgs e)
         {
+            await OnScroll.InvokeAsync(e);
+
             var topOffset = e.ScrollTop;
             if (topOffset >= TopOffset && Visible!=true)
             {
@@ -92,8 +93,7 @@ namespace MudBlazor
             {
                 Visible = false;
                 await InvokeAsync(() => StateHasChanged());
-
-            }
+            }           
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace MudBlazor
         /// </summary>
         public void Dispose()
         {
-            ScrollListener.OnScroll -= OnScroll;
+            ScrollListener.OnScroll -= ScrollListener_OnScroll;
         }
     }
 }
