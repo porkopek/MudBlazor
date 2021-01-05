@@ -46,7 +46,7 @@ namespace MudBlazor
         public async Task ScrollToFragment(string id, ScrollBehavior behavior)
         {
             await _jSRuntime
-                .InvokeVoidAsync("blazorHelpers.scrollToFragment", 
+                .InvokeVoidAsync("scrollHelpers.scrollToFragment", 
                                             id,
                                             behavior.ToDescriptionString());
         }
@@ -62,7 +62,7 @@ namespace MudBlazor
         {
             
             await _jSRuntime
-                .InvokeVoidAsync("blazorHelpers.scrollTo",
+                .InvokeVoidAsync("scrollHelpers.scrollTo",
                                             Selector,
                                             left,
                                             top,
