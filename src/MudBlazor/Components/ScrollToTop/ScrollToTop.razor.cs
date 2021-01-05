@@ -46,7 +46,7 @@ namespace MudBlazor
         /// The distance in pixels scrolled from the top of the selected element from which 
         /// the component becomes visible
         /// </summary>
-        [Parameter] public int TopOffset { get; set; }
+        [Parameter] public int TopOffset { get; set; } = 300;
 
         /// <summary>
         /// Smooth or Auto
@@ -82,7 +82,10 @@ namespace MudBlazor
         {
             await OnScroll.InvokeAsync(e);
 
-            var topOffset = e.ScrollTop;
+            var topOffset = e.NodeName=="#document" 
+                ? e.FirstChildBoundingClientRect.Top*-1 
+                : e.ScrollTop;
+
             if (topOffset >= TopOffset && Visible!=true)
             {
                 Visible = true;

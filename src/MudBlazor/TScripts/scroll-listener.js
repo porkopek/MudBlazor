@@ -29,22 +29,24 @@
     scrollHandler: function (dotnetReference, event) {
         try {
             let element = event.target;
-            let child = element.firstElementChild;
-            let boundingClientRect = element.getBoundingClientRect();
-            let firstChildBoundingClientRect = child.getBoundingClientRect();
+
             let scrollTop = element.scrollTop;
             let scrollHeight = element.scrollHeight;
             let scrollWidth = element.scrollWidth;
             let scrollLeft = element.scrollLeft;
+            let nodeName = element.nodeName;
 
+            let firstChild = element.firstElementChild;
+            let firstChildBoundingClientRect = firstChild.getBoundingClientRect();
             dotnetReference.invokeMethodAsync('RaiseOnScroll', {
-                boundingClientRect,
                 firstChildBoundingClientRect,
                 scrollLeft,
                 scrollTop,
                 scrollHeight,
                 scrollWidth,
+                nodeName
             });
+
         } catch (error) {
             console.log('[MudBlazor] Error in scrollHandler:', { error });
         }
@@ -52,7 +54,7 @@
 
     //remove event listener
     cancelListener: function (selector) {
-        let element = selector ? document.querySelector(selector) : document;
+        let element = selector ? document.querySelector(selector) : document.documentElement;
 
         element.removeEventListener('scroll', this.throttleScrollHandler);
     },

@@ -10,11 +10,6 @@ namespace MudBlazor
 {
     public class ScrollEventArgs : EventArgs
     {
-        /// <summary>
-        /// The GetBoundingClientRect() method returns a DOMRect object providing information about the size of an element and its position relative to the viewport
-        /// This is relative to the scrolled element
-        /// </summary>
-        public BoundingClientRect BoundingClientRect { get; set; }
 
         /// <summary>
         /// The BoundingClientRect for the first child of the scrolled element
@@ -40,6 +35,11 @@ namespace MudBlazor
         /// The ScrollWidth property is a measurement of the width of an element's content, including content not visible on the screen due to overflow
         /// </summary>
         public int  ScrollWidth { get; set; }
+
+        /// <summary>
+        /// Node name of the scrolled element
+        /// </summary>
+        public string NodeName { get; set; }
 
     }
 }
