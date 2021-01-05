@@ -8,7 +8,7 @@
 <MudLayout RightToLeft="@_rightToLeft">
     <MudAppBar Elevation="25">
         <MudIconButton Icon="@Icons.Material.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        <MudText Typo="Typo.h5" Class="mudblazor-appbar-brand-text">Mudblazor</MudText>
+       <MudText Typo="Typo.h5"  Class="mudblazor-appbar-brand-text">Mudblazor</MudText>
         <MudAppBarSpacer />
         <MudTooltip Text="Toggle light/dark theme">
             <MudIconButton Icon="@Icons.Material.Brightness4" Color="Color.Inherit" OnClick="@((e) => DarkMode())" />
@@ -29,6 +29,9 @@
     <MudMainContent Class="mudblazor-main-content">
         @Body
     </MudMainContent>
+    <ScrollToTop TopOffset="400"  >
+        <MudFab Icon="@Icons.Material.KeyboardArrowUp" Color="Color.Primary" />
+    </ScrollToTop>
 </MudLayout>
 
 @code {
